@@ -73,15 +73,49 @@ var wrong = [];
 		for (var i = 0; i < items.length; i ++){
 			if (items[i].name == items[i].value) {
 				console.log("YAY");
-				console.log(items[i].name, items[i].value);
+				correct.push([items[i].name, items[i].value]);
 			} else {
 				console.log("Boooo!");
-				items[i].value = items[i].name;
-				console.log(items[i].name, items[i].value);
+				wrong.push([items[i].name, items[i].value])
 			}
-			//items[i].name
 		}
+		var HTML;
+		var correct_num;
+		correct_num = correct.length;
+		HTML = "<p>You got " + correct_num + " question(s) right.</p>";
+		if (correct.length > 0){
+			HTML += "<p>You got these questions <em>correct</em>.</p>";
+			HTML += easyOrderedList(correct);
+		}
+		if (wrong.length > 0){
+			HTML += "<p>You got these questions <em>wrong</em>.</p>";
+			HTML += wrongEasyOrderedList(wrong);
+		}
+		print(HTML);
 	}, false);
+
+	function print(message){
+	  var outputDiv = document.getElementById('results');
+	  outputDiv.innerHTML = message;
+	}
+
+	function easyOrderedList( list ){
+	  var HTML = "<ol>";
+	  for (var i = 0; i < list.length; i ++){
+	    HTML += "<li>"+ list[i][0] +" = <b>"+ list[i][1] +"</b>.</li>";
+	  }
+	  HTML += "</ol>";
+	  return HTML;
+	}
+	function wrongEasyOrderedList( list ){
+	  var HTML = "<ol>";
+	  for (var i = 0; i < list.length; i ++){
+	    HTML += "<li>'"+ list[i][1] +"' should be: <b>"+ list[i][0] +"</b>.</li>";
+	  }
+	  HTML += "</ol>";
+	  return HTML;
+	}
+
 	</script>
 	</body>
 </html>
