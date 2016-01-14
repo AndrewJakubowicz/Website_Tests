@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Text Rich editor</title>
+	<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+</head>
+	<body>
+		<div>
+			<h1>Make your own quiz test!</h1>
+			<div id = "test" contenteditable="True">
+				<p></p>
+				<p>Here is where the quiz lives.</p>
+				<p>I'm avoiding using any more tags as it destroys the layout. </p>
+				<p>However for a prototype this is pretty neat.</p>
+				<p>I'm not sure how I will tackle allowing people to fill in their selection yet.</p>
+				<p>But this is at least a start.</p>
+				<p></p>
+			</div>
+			<button id="start">Make Input Field</button>
+			<button id="correct">Check Work</button>
+			<div id="results">
+			</div>
+		</div>
+  <script src="js/scripts.js"></script>
+	<script>
+	function getSelectedNode() // This will work on all browsers
+	{
+	    if (document.selection)
+	    	return document.selection.createRange().parentElement();
+	    else
+	    {
+	    	var selection = window.getSelection();
+	    	if (selection.rangeCount > 0)
+	    		return selection.getRangeAt(0).startContainer.parentNode;
+	    }
+	}
+
+
+	var elem = document.getElementById('start');
+	elem.addEventListener('click', function() {
+		// This gets a selection as text. It also has the index values of the selection.
+		var selection = window.getSelection();
+		var selection_text = selection.toString();
+		// remove trailing whitespace
+		if (selection_text.endsWith(" ")){
+			selection_text = selection_text.slice(0, -1);
+			console.log("slice", selection_text, "yay");
+		}
+
+		// Here we have the string that the selection lives in.
+		var nodeChange = getSelectedNode();
+		console.log(nodeChange);
+		var textToChange = nodeChange.innerHTML;
+		var replacedText = '<span><input class="selected" type="text" maxlength="'+ selection_text.length +'" name="'+ selection_text +'" style="width:'+ selection_text.length * 10 +'px;"><span>';
+
+		// This creates the start and end of the slice.
+		var start_text = "<span>" + textToChange.slice(0, selection.anchorOffset);
+		var end_text = textToChange.slice(selection.anchorOffset + selection_text.length) + "</span>";
+		textToChange = start_text + replacedText+ end_text;
+		nodeChange.innerHTML = textToChange;
+
+
+
+
+	}, false);
+
+var correct = [];
+var wrong = [];
+
+	elem = document.getElementById('correct');
+	elem.addEventListener('click', function() {
+		var items = document.getElementsByTagName("input");
+		for (var i = 0; i < items.length; i ++){
+			if (items[i].name == items[i].value) {
+				console.log("YAY");
+				console.log(items[i].name, items[i].value);
+			} else {
+				console.log("Boooo!");
+				items[i].value = items[i].name;
+				console.log(items[i].name, items[i].value);
+			}
+			//items[i].name
+		}
+	}, false);
+	</script>
+	</body>
+</html>
